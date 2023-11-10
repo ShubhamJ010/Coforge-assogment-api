@@ -8,5 +8,6 @@ import java.util.List;
 public interface UserService {
     List<User> getAllUser() throws Exception;
      User AddUser(User user, Address address) throws Exception;
-    public boolean deleteUserById(Long userId) throws Exception;
+    public boolean deleteUserByEmail(String email) throws Exception;
+
 }

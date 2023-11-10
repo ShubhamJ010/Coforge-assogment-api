@@ -28,9 +28,9 @@ public class UserController {
         return userService.getAllUser();
     }
 
-    @DeleteMapping("/{userId}")
-    public boolean deleteUser(@PathVariable Long userId) throws Exception {
-        return userService.deleteUserById(userId);
+    @DeleteMapping("/{email}")
+    public boolean deleteUser( @PathVariable String email) throws Exception {
+        return userService.deleteUserByEmail(email);
     }
 
 }

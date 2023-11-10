@@ -3,11 +3,12 @@ package com.example.ExamPortal.Service.Impl;
 import com.example.ExamPortal.Exception.UserExistsException;
 import com.example.ExamPortal.Model.Address;
 import com.example.ExamPortal.Model.User;
-import com.example.ExamPortal.Repo.AddressRepo;
+//import com.example.ExamPortal.Repo.AddressRepo;
 import com.example.ExamPortal.Repo.UserRepo;
 import com.example.ExamPortal.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
-    private final AddressRepo addressRepo;
+//    private final AddressRepo addressRepo;
 
 
     @Override
@@ -34,18 +35,19 @@ public class UserServiceImpl implements UserService {
             throw new UserExistsException("User with the same email already exists.");
         }
 
-        addressRepo.save(address);
+//      addressRepo.save(address);
 
         return userRepo.save(user);
     }
 
     @Override
-    public boolean deleteUserById(Long userId) throws Exception {
-        if (userRepo.existsById(userId)) {
-            userRepo.deleteById(userId);
+    @Transactional
+    public boolean deleteUserByEmail(String email) throws Exception {
+        if (userRepo.existsByEmail(email)) {
+            userRepo.deleteByEmail(email);
             return true; // User deleted successfully
         }
-        return false;
+        throw new UserExistsException("User with the same email already exists.");
     }
 }
 
