@@ -38,5 +38,14 @@ public class UserServiceImpl implements UserService {
 
         return userRepo.save(user);
     }
+
+    @Override
+    public boolean deleteUserById(Long userId) throws Exception {
+        if (userRepo.existsById(userId)) {
+            userRepo.deleteById(userId);
+            return true; // User deleted successfully
+        }
+        return false;
+    }
 }
 

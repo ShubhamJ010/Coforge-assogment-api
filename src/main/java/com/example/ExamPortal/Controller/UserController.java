@@ -4,6 +4,7 @@ import com.example.ExamPortal.Model.Address;
 import com.example.ExamPortal.Model.User;
 import com.example.ExamPortal.Service.Impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,11 @@ public class UserController {
     @GetMapping("/all")
     public List<User> getUsers() throws Exception {
         return userService.getAllUser();
+    }
+
+    @DeleteMapping("/{userId}")
+    public boolean deleteUser(@PathVariable Long userId) throws Exception {
+        return userService.deleteUserById(userId);
     }
 
 }
