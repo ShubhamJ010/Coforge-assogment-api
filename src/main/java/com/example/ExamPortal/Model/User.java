@@ -9,7 +9,8 @@ import lombok.Data;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "user_id_sequence", initialValue = 100000, allocationSize = 2)
+    @GeneratedValue(generator = "user_id_sequence", strategy = GenerationType.SEQUENCE)
     private Long id;
     private String firstName;
     private String lastName;

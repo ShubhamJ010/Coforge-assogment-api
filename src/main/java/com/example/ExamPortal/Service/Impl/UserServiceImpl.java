@@ -7,13 +7,16 @@ import com.example.ExamPortal.Repo.AddressRepo;
 import com.example.ExamPortal.Repo.UserRepo;
 import com.example.ExamPortal.Service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
@@ -44,12 +47,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public boolean deleteUserByEmail(String email) throws UserExistsException {
-        if (userRepo.existsByEmail(email)) {
-            userRepo.deleteByEmail(email);
+    public boolean deleteUserById(Long id) throws UserExistsException {
+        if (userRepo.existsById(id)) {
+            userRepo.deleteById(id);
             return true; // User deleted successfully
         }
-        throw new UserExistsException("User with the same email already exists.");
+        throw new UserExistsException("User with this email doesn't exist.");
+    }
+
+    @Override
+    public User updateUser(Long userId, User updatedUserData) {
+        return userRepo.save(updatedUserData);
+    }
+
+    @Override
+    public Optional<User> userById(Long id) throws UserExistsException {
+        return this.userRepo.findById(id);
     }
 }
 
