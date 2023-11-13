@@ -21,14 +21,14 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<User> getAllUser() throws Exception {
+    public List<User> getAllUser() throws RuntimeException {
         if (userRepo.count() == 0)
             throw new RuntimeException("The DataBase is empty");
         return userRepo.findAll();
     }
 
     @Override
-    public User AddUser(User user, Address address) throws Exception {
+    public User AddUser(User user, Address address) throws IllegalArgumentException, UserExistsException {
         if (user == null || address == null) {
             throw new IllegalArgumentException("User and address must not be null.");
         }
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public boolean deleteUserByEmail(String email) throws Exception {
+    public boolean deleteUserByEmail(String email) throws UserExistsException {
         if (userRepo.existsByEmail(email)) {
             userRepo.deleteByEmail(email);
             return true; // User deleted successfully
