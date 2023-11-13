@@ -3,7 +3,7 @@ package com.example.ExamPortal.Service.Impl;
 import com.example.ExamPortal.Exception.UserExistsException;
 import com.example.ExamPortal.Model.Address;
 import com.example.ExamPortal.Model.User;
-//import com.example.ExamPortal.Repo.AddressRepo;
+import com.example.ExamPortal.Repo.AddressRepo;
 import com.example.ExamPortal.Repo.UserRepo;
 import com.example.ExamPortal.Service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +17,13 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
-//    private final AddressRepo addressRepo;
+    private final AddressRepo addressRepo;
 
 
     @Override
     public List<User> getAllUser() throws Exception {
+        if (userRepo.count() == 0)
+            throw new RuntimeException("The DataBase is empty");
         return userRepo.findAll();
     }
 
@@ -35,7 +37,7 @@ public class UserServiceImpl implements UserService {
             throw new UserExistsException("User with the same email already exists.");
         }
 
-//      addressRepo.save(address);
+        addressRepo.save(address);
 
         return userRepo.save(user);
     }
