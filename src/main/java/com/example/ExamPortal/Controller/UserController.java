@@ -3,7 +3,6 @@ package com.example.ExamPortal.Controller;
 import com.example.ExamPortal.Model.Address;
 import com.example.ExamPortal.Model.User;
 import com.example.ExamPortal.Service.Impl.UserServiceImpl;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,7 @@ public class UserController {
     private final UserServiceImpl userService;
 
     @PostMapping("/add")
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user) throws Exception {
+    public ResponseEntity<User> createUser(@RequestBody User user) throws Exception {
         Address address = user.getAddress();
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.AddUser(user, address));
 
