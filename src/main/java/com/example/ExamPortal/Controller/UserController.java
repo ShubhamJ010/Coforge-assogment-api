@@ -14,7 +14,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     private final UserServiceImpl userService;
@@ -41,9 +41,9 @@ public class UserController {
         return userService.deleteUserById(id);
     }
 
-    @PutMapping("/update/{userId}")
-    public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody User updatedUserData) {
-        User updatedUser = userService.updateUser(userId, updatedUserData);
+    @PutMapping("/update")
+    public ResponseEntity<User> updateUser(@RequestBody User updatedUserData) {
+        User updatedUser = userService.updateUser(updatedUserData);
         return ResponseEntity.ok(updatedUser);
     }
 

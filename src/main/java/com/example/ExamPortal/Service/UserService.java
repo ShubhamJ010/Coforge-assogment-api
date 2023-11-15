@@ -14,7 +14,7 @@ public interface UserService {
 
     public boolean deleteUserById(Long Id) throws UserExistsException;
 
-    User updateUser(Long userId, User updatedUserData);
+    User updateUser(User updatedUserData);
 
     Optional<User> userById(Long id) throws UserExistsException;
 }

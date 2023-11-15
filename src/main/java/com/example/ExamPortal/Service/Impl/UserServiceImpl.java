@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Long userId, User updatedUserData) {
+    public User updateUser(User updatedUserData) {
         return userRepo.save(updatedUserData);
     }
 
