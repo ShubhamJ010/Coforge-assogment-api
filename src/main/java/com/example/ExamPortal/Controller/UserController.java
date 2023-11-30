@@ -1,8 +1,11 @@
 package com.example.ExamPortal.Controller;
 
+import com.example.ExamPortal.Helper.GenericMapper;
 import com.example.ExamPortal.Model.Address;
+import com.example.ExamPortal.Model.Dto.UserDto;
 import com.example.ExamPortal.Model.User;
 import com.example.ExamPortal.Service.Impl.UserServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +23,16 @@ public class UserController {
     private final UserServiceImpl userService;
 
     @PostMapping("/add")
-    public ResponseEntity<User> createUser(@RequestBody User user) throws Exception {
-        Address address = user.getAddress();
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.AddUser(user, address));
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserDto userDto) throws Exception {
+        Address address = GenericMapper.AddressDtoToAddressEntity(userDto.getAddress()) ;
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService
+                .AddUser(GenericMapper.UserDtoToUserEntity(userDto), address));
 
     }
 
     @GetMapping("/all")
-    public List<User> getUsers() throws Exception {
-        return userService.getAllUser();
+    public ResponseEntity<List<User>> getUsers() throws Exception {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUser());
     }
 
     @GetMapping("/{id}")
@@ -42,8 +46,8 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<User> updateUser(@RequestBody User updatedUserData) {
-        User updatedUser = userService.updateUser(updatedUserData);
+    public ResponseEntity<User> updateUser(@Valid @RequestBody UserDto updatedUserData) {
+        User updatedUser = userService.updateUser(GenericMapper.UserDtoToUserEntity(updatedUserData));
         return ResponseEntity.ok(updatedUser);
     }
 

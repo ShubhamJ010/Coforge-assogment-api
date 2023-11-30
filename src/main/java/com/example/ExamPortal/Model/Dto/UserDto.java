@@ -33,9 +33,6 @@ public class UserDto {
     private String password;
 
     @NotBlank
-    private String confirmPassword;
-
-    @NotBlank
     @Size(min = 1, max = 250)
     private String comments;
 
