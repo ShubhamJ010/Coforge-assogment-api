@@ -1,6 +1,9 @@
 package com.example.ExamPortal.Controller;
 
+import com.example.ExamPortal.Helper.GenericMapper;
 import com.example.ExamPortal.Model.Address;
+import com.example.ExamPortal.Model.Dto.AddressDto;
+import com.example.ExamPortal.Model.Dto.UserDto;
 import com.example.ExamPortal.Model.User;
 import com.example.ExamPortal.Service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -24,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@WebMvcTest(controllers = UserController.class)
+@WebMvcTest(controllers = UserController.class)
 //@AutoConfigureMockMvc(addFilters = false)//remove spring security no need of token
 //@ExtendWith(MockitoExtension.class)
 class UserControllerTest {
@@ -42,9 +46,10 @@ class UserControllerTest {
     private UserController userController;
 
 
-    private Address address;
-    private User user;
-    private User user1;
+    private AddressDto address;
+    private AddressDto address2;
+    private UserDto user;
+    private UserDto user1;
 
 
     @BeforeEach
@@ -52,30 +57,27 @@ class UserControllerTest {
         // This method will be executed before each test method
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        address = Address.builder().city("Faridabad").country("India").streetNumber("nununu").build();
+        address = AddressDto.builder().city("Faridabad").country("India").streetNumber("nununu").build();
+        address2 = AddressDto.builder().city("Faridabad").country("India").streetNumber("nununu").build();
         this.objectMapper = new ObjectMapper();
-        user = User.builder()
-                .id(10000L)
+        user = UserDto.builder()
                 .email("shubham@coforge.com")
                 .gender("Male")
                 .password("shubham")
-                .confirmPassword("shubham")
                 .comments("hello world")
                 .firstName("Shubham")
                 .lastName("Jha")
                 .address(address)
                 .build();
 
-        user1 = User.builder()
-                .id(19999L)
+        user1 = UserDto.builder()
                 .email("shubham1000@coforge.com")
                 .gender("Male")
                 .password("shubham")
-                .confirmPassword("shubham")
                 .comments("hello world")
                 .firstName("Shubham")
                 .lastName("A")
-                .address(address)
+                .address(address2)
                 .build();
 
     }
@@ -83,7 +85,7 @@ class UserControllerTest {
     @Test
     void createUser() throws Exception {
 
-        Mockito.when(service.AddUser(Mockito.any(User.class), Mockito.any(Address.class))).thenReturn(user);
+        Mockito.when(service.AddUser(Mockito.any(User.class), Mockito.any(Address.class))).thenReturn(GenericMapper.UserDtoToUserEntity(user));
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/user/add")
                         .content(objectMapper.writeValueAsString(user))
@@ -98,8 +100,7 @@ class UserControllerTest {
 
     @Test
     void getUsers() throws Exception {
-        List<User> users = new ArrayList<>();
-        users.addAll(Arrays.asList(user, user1));
+        List<User> users = new ArrayList<>(Arrays.asList(GenericMapper.UserDtoToUserEntity(user), GenericMapper.UserDtoToUserEntity(user1)));
         Mockito.when(service.getAllUser()).thenReturn(users);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -115,7 +116,7 @@ class UserControllerTest {
 //      Long l = Mockito.mock(Long.class);
         Long l = 10000L;
 //      user.setId(2L);
-        Mockito.when(service.userById(Mockito.any(Long.class))).thenReturn(Optional.ofNullable(user));
+        Mockito.when(service.userById(Mockito.any(Long.class))).thenReturn(Optional.ofNullable(GenericMapper.UserDtoToUserEntity(user)));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/user/{id}", l))
                 .andExpect(status().isOk())

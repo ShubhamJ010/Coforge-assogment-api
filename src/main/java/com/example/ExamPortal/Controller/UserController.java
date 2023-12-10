@@ -5,8 +5,10 @@ import com.example.ExamPortal.Model.Address;
 import com.example.ExamPortal.Model.Dto.UserDto;
 import com.example.ExamPortal.Model.User;
 import com.example.ExamPortal.Service.Impl.UserServiceImpl;
+import com.example.ExamPortal.Service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +18,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
-@RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class UserController {
 
-    private final UserServiceImpl userService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/add")
     public ResponseEntity<User> createUser(@Valid @RequestBody UserDto userDto) throws Exception {
