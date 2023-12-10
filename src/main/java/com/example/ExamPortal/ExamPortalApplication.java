@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @RequiredArgsConstructor
 public class ExamPortalApplication implements CommandLineRunner {
 
-	private final UserServiceImpl userService;
 	public static void main(String[] args)
 	{
 		SpringApplication.run(ExamPortalApplication.class, args);
